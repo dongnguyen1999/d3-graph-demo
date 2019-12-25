@@ -6,12 +6,27 @@ import * as d3 from 'd3-force'
 var nodes = [
   {id: '1'},
   {id: '2'},
-  {id: '3'}
+  {id: '3'},
+  {id: '4'},
+  {id: '5'},
+  {id: '6'},
+  {id: '7'},
+  {id: '8'},
+  {id: '9'},
 ]
 var links = [
   {source: '1', target: '2'},
   {source: '2', target: '3'},
-  {source: '3', target: '1'}
+  {source: '3', target: '4'},
+  {source: '7', target: '8'},
+  {source: '1', target: '5'},
+  {source: '3', target: '9'},
+  {source: '8', target: '2'},
+  {source: '2', target: '7'},
+  {source: '3', target: '5'},
+  {source: '3', target: '7'},
+  {source: '7', target: '9'},
+  {source: '6', target: '4'},
 ]
 
 var width = 300;
@@ -20,14 +35,14 @@ var height = 600;
 export default class App extends Component {
   _isMounted = false;
   
-  constructor(props){
-    super(props);
-    this.counter = 0;
-    this.state = {
-      nodes: nodes,
-      links: links
-    }
-  }
+  // constructor(props){
+  //   super(props);
+  //   this.counter = 0;
+  //   this.state = {
+  //     nodes: nodes,
+  //     links: links
+  //   }
+  // }
   ticked(){
     // console.log(this._isMount);
     if (this._isMounted) {
@@ -52,7 +67,7 @@ export default class App extends Component {
 
   drawLink() {
     let linkViews = [];
-    this.state.links.forEach((link) => {
+    links.forEach((link) => {
       if (link.source.id != undefined){
         linkViews.push(<Line 
           key={link.source.id + ":" + link.target.id}
@@ -70,7 +85,7 @@ export default class App extends Component {
   drawNode() {
     // console.log("Drawing node at " + nodes[0].x + ":" + nodes[0].y);
     let nodeViews = [];
-    this.state.nodes.forEach((node) => {
+    nodes.forEach((node) => {
       nodeViews.push(<Circle 
         onMoveShouldSetResponder={() => {console.log("onMoveShouldSetResponder")}}
         onResponderGrant={() => this.dragStartedListener(node.index)}
@@ -92,19 +107,19 @@ export default class App extends Component {
 
   dragStartedListener(index) {
     this.simulation.alphaTarget(0.3).restart();
-    this.state.nodes[index].fx = this.state.nodes[index].x;
-    this.state.nodes[index].fy = this.state.nodes[index].y;
+    nodes[index].fx = nodes[index].x;
+    nodes[index].fy = nodes[index].y;
   }
   
   draggedListener(index, event) {
-    this.state.nodes[index].fx = event.nativeEvent.locationX;
-    this.state.nodes[index].fy = event.nativeEvent.locationY;
+    nodes[index].fx = event.nativeEvent.locationX;
+    nodes[index].fy = event.nativeEvent.locationY;
   }
   
   dragEndedListener(index) {
     this.simulation.alphaTarget(0);
-    this.state.nodes[index].fx = null;
-    this.state.nodes[index].fy = null;
+    nodes[index].fx = null;
+    nodes[index].fy = null;
   }
 
 
